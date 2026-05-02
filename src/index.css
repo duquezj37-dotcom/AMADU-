@@ -328,3 +328,68 @@ footer{
 .form-group input:focus { border-color: var(--ink); outline: none; }
 
 .action-row { display: flex; gap: 1rem; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  nav {
+    padding: 1rem 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .logo-mark {
+    flex: 1;
+  }
+  .nav-menu {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+  }
+  .site {
+    padding-top: 110px; /* Más espacio ya que el menú ahora ocupa dos líneas */
+  }
+  
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .hero-left {
+    padding: 3rem 1.5rem;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-right {
+    padding: 3rem 1.5rem;
+    min-height: 300px;
+  }
+  
+  .servicios-section, 
+  .portfolio-section, 
+  .proceso-section, 
+  .testimonial-section, 
+  .cta-section, 
+  footer {
+    padding: 3rem 1.5rem;
+  }
+  
+  .testimonial-section {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .cta-btns {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .cta-btns button {
+    width: 100%;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+}
