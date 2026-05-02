@@ -1,85 +1,44 @@
-import { useState, useEffect } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import PublicWebsite from './pages/PublicWebsite';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminLogin from './pages/admin/AdminLogin';
+import ProductsManager from './pages/admin/ProductsManager';
+import CategoriesManager from './pages/admin/CategoriesManager';
+import { useEffect, useState } from 'react';
 import { supabase } from './supabaseClient';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import MarqueeBar from './components/MarqueeBar';
-import ProductList from './components/ProductList';
-import Portfolio from './components/Portfolio';
-import Proceso from './components/Proceso';
-import StatsBar from './components/StatsBar';
-import Testimonials from './components/Testimonials';
-import CTASection from './components/CTASection';
-import Footer from './components/Footer';
-import AddProductModal from './components/AddProductModal';
-import AdminLoginModal from './components/AdminLoginModal';
 
 function App() {
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [session, setSession] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check active session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setIsAdmin(!!session);
+      setSession(session);
+      setLoading(false);
     });
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAdmin(!!session);
+      setSession(session);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleProductAdded = () => {
-    setRefreshKey(prev => prev + 1);
-  };
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-  };
+  if (loading) return null;
 
   return (
-    <div className="site">
-      <Navbar 
-        onContactClick={() => {
-          window.location.href = 'mailto:duquezj37@gmail.com';
-        }} 
-        isAdmin={isAdmin}
-        onAddClick={() => setIsAddModalOpen(true)}
-        onLogout={handleLogout}
-        onAdminLoginClick={() => setIsAdminLoginOpen(true)}
-      />
-      <Hero />
-      <MarqueeBar />
+    <Routes>
+      <Route path="/" element={<PublicWebsite />} />
+      <Route path="/admin/login" element={!session ? <AdminLogin /> : <Navigate to="/admin/dashboard" />} />
       
-      <main>
-        <ProductList key={refreshKey} />
-        <Portfolio />
-        <Proceso />
-        <StatsBar />
-        <Testimonials />
-        <CTASection />
-      </main>
-
-      <Footer />
-
-      {isAdmin && (
-        <AddProductModal 
-          isOpen={isAddModalOpen} 
-          onClose={() => setIsAddModalOpen(false)} 
-          onSuccess={handleProductAdded}
-        />
-      )}
-
-      <AdminLoginModal
-        isOpen={isAdminLoginOpen}
-        onClose={() => setIsAdminLoginOpen(false)}
-        onSuccess={() => setIsAdminLoginOpen(false)}
-      />
-    </div>
+      <Route path="/admin" element={session ? <AdminLayout /> : <Navigate to="/admin/login" />}>
+        <Route index element={<Navigate to="/admin/dashboard" />} />
+        <Route path="dashboard" element={<ProductsManager />} />
+        <Route path="categories" element={<CategoriesManager />} />
+      </Route>
+      
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 }
 
