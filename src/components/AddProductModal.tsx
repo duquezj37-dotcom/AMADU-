@@ -47,7 +47,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onSu
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: '28px', fontWeight: 700, letterSpacing: '-1px' }}>Cotizar / Publicar</h2>
+        <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: '28px', fontWeight: 700, letterSpacing: '-1px' }}>Panel Admin: Nuevo Servicio</h2>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div className="form-group">
             <label>Nombre del Servicio / Producto</label>
@@ -87,8 +87,11 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onSu
                 <option>Estampados</option>
                 <option>Impresión</option>
                 <option>Papelería</option>
+                <option>Cuadros en resina</option>
+                <option>Llaveros en resina</option>
                 <option>Otros</option>
               </select>
+
             </div>
           </div>
           <div className="form-group">
